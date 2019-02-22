@@ -5,17 +5,43 @@ import './item-status-filter.css';
 
 export default class ItemStatusFilter extends Component {
 
+    state = {
+        filterState: 'all'
+    };
+
+    onClick = (e) => {
+        const val = e.target.value;
+        this.setState(({filterState}) => {
+            return {
+                filterState: val
+            };
+        });
+    };
+
     render() {
+
+        const {filterState} = this.state;
+
+        const classAct = "btn btn-info";
+        const classPass = "btn btn-outline-secondary";
+
+
         return (
             <div className="btn-group">
                 <button type="button"
-                        className="btn btn-info">All
+                        value='all'
+                        onClick={this.onClick}
+                        className={classAct}>All
                 </button>
                 <button type="button"
-                        className="btn btn-outline-secondary">Active
+                        value='active'
+                        onClick={this.onClick}
+                        className={classPass}>Active
                 </button>
                 <button type="button"
-                        className="btn btn-outline-secondary">Done
+                        value='done'
+                        onClick={this.onClick}
+                        className={classPass}>Done
                 </button>
             </div>
         );
