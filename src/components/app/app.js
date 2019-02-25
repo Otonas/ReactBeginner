@@ -17,7 +17,9 @@ export default class App extends Component {
             this.createTodoItem('Drink Coffee'),
             this.createTodoItem('Make Awesome App'),
             this.createTodoItem('Have a lunch')
-        ]
+        ],
+        filterState: 'all',
+        searchText: ''
     };
 
     createTodoItem(label) {
@@ -84,10 +86,34 @@ export default class App extends Component {
         });
     };
 
+    onFilterAllClick = () => {
+        this.setState({
+            filterState: 'all'
+        });
+    };
+
+    onFilterActiveClick = () => {
+        this.setState({
+            filterState: 'active'
+        });
+    };
+
+    onFilterDoneClick = () => {
+        this.setState({
+            filterState: 'done'
+        });
+    };
+
+    onSearch = (e) => {
+        this.setState({
+            searchText: e.target.value
+        });
+    };
 
     render() {
 
-        const {todoData} = this.state;
+
+        const {todoData, filterState, searchText} = this.state;
 
         const doneCount = todoData
             .filter((el) => el.done).length;
@@ -96,15 +122,29 @@ export default class App extends Component {
 
         return (
             <div className="todo-app">
-                <AppHeader toDo={todoCount} done={doneCount}/>
-                <div className="top-panel d-flex">
-                    <SearchPanel/>
-                    <ItemStatusFilter
 
+                <AppHeader toDo={todoCount} done={doneCount}/>
+
+                <div className="top-panel d-flex">
+
+                    <SearchPanel
+                        onSearch={this.onSearch}
                     />
+
+                    <ItemStatusFilter
+                        onFilterAllClick={this.onFilterAllClick}
+                        onFilterActiveClick={this.onFilterActiveClick}
+                        onFilterDoneClick={this.onFilterDoneClick}
+                        classFilterAll={filterState === 'all' ? 'btn btn-info' : 'btn btn-outline-secondary'}
+                        classFilterActive={filterState === 'active' ? 'btn btn-info' : 'btn btn-outline-secondary'}
+                        classFilterDone={filterState === 'done' ? 'btn btn-info' : 'btn btn-outline-secondary'}
+                    />
+
                 </div>
 
                 <TodoList todos={todoData}
+                          filterState={filterState}
+                          searchText={searchText}
                           onDeleted={this.deleteItem}
                           onToggleImportant={this.onToggleImportant}
                           onToggleDone={this.onToggleDone}
